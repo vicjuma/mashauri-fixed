@@ -1,0 +1,267 @@
+    1  sudo -i
+    2  clear
+    3  pip3
+    4  ufw app list
+    5  sudo ufw app list
+    6  ufw allow OpenSSH
+    7  sudo ufw allow OpenSSH
+    8  sudo ufw enable
+    9  ufw status
+   10  sudo ufw status
+   11  pwd
+   12  ls
+   13  unzip fiberIS.zip 
+   14  sudo apt install unzip
+   15  unzip fiberIS.zip 
+   16  ls
+   17  clear
+   18  mkdir .venvs
+   19  virtualenv
+   20  sudo apt install python3-virtualenv
+   21  clear
+   22  virtualenv .venvs/mashauri
+   23  source .venvs/mashauri/bin/activate
+   24  ls
+   25  cd fiberIS/
+   26  ls
+   27  pip3 install -r requirements.txt 
+   28  sudo apt-get install python3-dev default-libmysqlclient-dev build-essential
+   29  pip3 install -r requirements.txt 
+   30  nano requirements.txt 
+   31  clear
+   32  pip3 install -r requirements.txt 
+   33  clear
+   34  python3 manage.py runserver
+   35  python manage.py makemigrations
+   36  ls
+   37  clear
+   38  ls
+   39  sudo rm fiberIS -r
+   40  git clone -b master https://github.com/vicjuma/mashauri.git
+   41  ls
+   42  cd mashauri/
+   43  clear
+   44  ls
+   45  nano requirements.txt 
+   46  source ../.venvs/mashauri/bin/activate
+   47  ls
+   48  cd mashauri/
+   49  ls
+   50  cd ../mashauri/
+   51  ls
+   52  cd ../fiberIS/
+   53  ls
+   54  cd ..
+   55  clear
+   56  python manage.py runserver
+   57  clear
+   58  python manage.py runserver
+   59  mv ~/db.sqlite3 .
+   60  python manage.py runserver
+   61  sudo ufw allow 8000
+   62  python manage.py runserver
+   63  sudo ufw allow 80/tcp
+   64  sudo ufw allow 443/tcp
+   65  sudo systemctl status nginx
+   66  sudo apt update
+   67  sudo apt install nginx
+   68  sudo ufw app list
+   69  systemctl status nginx
+   70  pip3 install django gunicorn
+   71  nano fiberIS/settings.py 
+   72  python3 manage.py collectstatic
+   73  python3 manage.py runserver 0.0.0.0:8000
+   74  clear
+   75  ls
+   76  cd fiberIS/
+   77  gunicorn --bind 0.0.0.0:8000 project.wsgi
+   78  clear
+   79  ls
+   80  cd ..
+   81  ls
+   82  gunicorn --bind 0.0.0.0:8000 fiberIS.wsgi
+   83  ls /etc/nginx/
+   84  nano /etc/nginx/mime.types 
+   85  sudo systemctl enable nginx
+   86  nano /etc/nginx/nginx.conf 
+   87  deactivate
+   88  clear
+   89  sudo nano /etc/systemd/system/gunicorn.socket
+   90  sudo nano /etc/systemd/system/gunicorn.service
+   91  pwd
+   92  sudo nano /etc/systemd/system/gunicorn.service
+   93  ls -al
+   94  ls ~/.venvs/
+   95  pwd ~/.venvs/
+   96  sudo nano /etc/systemd/system/gunicorn.service
+   97  sudo systemctl start gunicorn.socket
+   98  sudo systemctl enable gunicorn.socket
+   99  sudo systemctl status gunicorn.socket
+  100  file /run/gunicorn.sock
+  101  curl --unix-socket /run/gunicorn.sock localhost
+  102  sudo systemctl status gunicorn
+  103  curl --unix-socket /run/gunicorn.sock localhost
+  104  sudo nano /etc/systemd/system/gunicorn.service
+  105  sudo systemctl restart gunicorn.socket
+  106  sudo systemctl status gunicorn.socket
+  107  sudo systemctl status gunicorn
+  108  systemctl daemon-reload
+  109  sudo systemctl status gunicorn
+  110  clear
+  111  systemctl daemon-reload
+  112  sudo systemctl restart gunicorn.socket
+  113  sudo systemctl status gunicorn
+  114  ls /home/steve/.venvs
+  115  sudo nano /etc/systemd/system/gunicorn.service
+  116  systemctl daemon-reload
+  117  sudo systemctl restart gunicorn.socket
+  118  sudo systemctl status gunicorn
+  119  sudo systemctl restart gunicorn.socket
+  120  systemctl daemon-reload
+  121  sudo systemctl restart gunicorn.socket
+  122  sudo systemctl status gunicorn
+  123  sudo systemctl daemon-reload
+  124  sudo systemctl restart gunicorn
+  125  sudo systemctl status gunicorn
+  126  curl --unix-socket /run/gunicorn.sock localhost
+  127  clear
+  128  sudo systemctl status gunicorn
+  129  clear
+  130  sudo rm -r /etc/nginx/sites-enabled/default
+  131  sudo nano /etc/nginx/sites-available/mashauri
+  132  ls
+  133  cd mashauri/
+  134  pwd
+  135  sudo nano /etc/nginx/sites-available/mashauri
+  136  sudo ln -s /etc/nginx/sites-available/mashauri /etc/nginx/sites-enabled/
+  137  sudo systemctl restart nginx
+  138  sudo nginx -t
+  139  sudo systemctl restart nginx
+  140  sudo ufw delete allow 8000
+  141  sudo ufw allow 'Nginx Full'
+  142  cd mashauri/
+  143  ls
+  144  cd ..
+  145  ls
+  146  python3 manage.py collectstatic
+  147  source ~/.venvs/mashauri/bin/activate
+  148  ls
+  149  python3 manage.py collectstatic
+  150  sudo nano /etc/nginx/sites-available/mashauri
+  151  sudo systemctl reload nginx
+  152  sudo systemctl restart nginx
+  153  sestatus
+  154  sudo setenforce 0
+  155  sudo tail -f /var/log/nginx/error.log
+  156  sudo nano /etc/nginx/sites-available/mashauri
+  157  sudo systemctl reload nginx
+  158  sudo systemctl restart nginx
+  159  gpasswd -a www-data steve
+  160  sudo gpasswd -a www-data steve
+  161  nginx -s reload
+  162  sudo nginx -s reload
+  163  sudo tail -f /var/log/nginx/error.log
+  164  ls
+  165  ls ..
+  166  mv ../media/ .
+  167  clear
+  168  sudo tail -f /var/log/nginx/error.log
+  169  sudo nano /etc/nginx/sites-available/mashauri
+  170  ls
+  171  cd mashauri/
+  172  ls
+  173  ls static
+  174  cd static
+  175  ls
+  176  ls ../static
+  177  ls ../staticfiles/
+  178  sudo nginx -s reload
+  179  sudo systemctl restart nginx
+  180  cd ../staticfiles/
+  181  pwd
+  182  ls
+  183  sudo nano /etc/nginx/sites-available/mashauri
+  184  sudo nginx -t
+  185  sudo systemctl reload nginx
+  186  sudo nginx -s reload
+  187  sudo nano /etc/nginx/sites-available/mashauri
+  188  clear
+  189  ls
+  190  cp admin/ jazzmin/ vendor/ ../static -r
+  191  ls -al
+  192  sudo nginx -s reload
+  193  sudo systemctl reload nginx
+  194  sudo systemctl restart nginx
+  195  sudo systemctl restart gunicorn.service 
+  196  cd ../mashauri/
+  197  ls
+  198  cd ../fiberIS/
+  199  ls
+  200  nano settings.py 
+  201  sudo systemctl restart gunicorn.service 
+  202  sudo systemctl reload nginx
+  203  sudo systemctl status gunicorn.service 
+  204  sudo nano /etc/nginx/sites-available/mashauri
+  205  sudo systemctl restart gunicorn.service 
+  206  sudo systemctl reload nginx
+  207  sudo systemctl restart nginx
+  208  nano settings.py 
+  209  sudo systemctl restart gunicorn.service 
+  210  sudo systemctl status gunicorn.service 
+  211  ls
+  212  sudo systemctl stop gunicorn.service
+  213  ls
+  214  cd mashauri/
+  215  ls
+  216  ls mashauri/
+  217  ls
+  218  cd mashauri/
+  219  ls
+  220  cd ..
+  221  ls
+  222  rm mashauri/ -r
+  223  sudo rm mashauri/ -r
+  224  ls
+  225  sudo rm mashauri/ -r
+  226  ls
+  227  cd mashauri/
+  228  ls
+  229  nano models.py
+  230  source ~/.venvs/mashauri/bin/activate
+  231  cd ..
+  232  python3 manage.py makemigrations
+  233  python3 manage.py migrate
+  234  clear
+  235  deactivate 
+  236  sudo systemctl status gunicorn.service 
+  237  sudo systemctl restart gunicorn.service 
+  238  sudo systemctl status gunicorn.service 
+  239  sudo tail -f /var/log/nginx/error.log
+  240  cd mashauri/mashauri/
+  241  nano views.py 
+  242  sudo systemctl restart gunicorn.service 
+  243  clear
+  244  sudo systemctl restart gunicorn.service 
+  245  clear
+  246  curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elastic.gpg
+  247  echo "deb [signed-by=/usr/share/keyrings/elastic.gpg] https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+  248  sudo apt update
+  249  sudo apt install elasticsearch
+  250  sudo nano /etc/elasticsearch/elasticsearch.yml
+  251  sudo systemctl start elasticsearch
+  252  sudo systemctl enable elasticsearch
+  253  curl localhost:9200
+  254  cd mashauri/
+  255  cd fiberIS/
+  256  nano settings.py 
+  257  source ~/.venvs/mashauri/bin/activate
+  258  pip install django-elasticsearch-dsl
+  259  clear
+  260  source ~/.venvs/mashauri/bin/activate
+  261  cd mashauri/
+  262  python manage.py search_index --rebuild
+  263  clear
+  264  deactivate
+  265  sudo systemctl restart gunicorn.service 
+  266  sudo systemctl status gunicorn.service 
+  267  history > ../history.txt

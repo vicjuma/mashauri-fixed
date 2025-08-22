@@ -1,0 +1,102 @@
+{% extends '../partials/base.html' %}
+{% load static %}
+{% block extra_styles %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
+<style>
+    .btn:focus {
+        outline: none;
+      }
+      .hidden {
+        display: none;
+      }
+      .listed {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      .p-top {
+        padding-top: 7px;
+      }
+      .td-padding {
+        padding-top: 15px !important;
+      }
+      .container {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        min-width: 480px;
+        max-width: 768px;
+      }
+      .container-fluid {
+        padding-bottom: 10px;
+        margin-top: 1px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .paddingLF {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+      .inactiveLink {
+        pointer-events: none;
+        cursor: default;
+      }
+      .buttons-wrapper {
+        display: inline-block;
+      }
+</style>
+{% endblock %}
+{% block main %}
+<div class="container">
+    <!-- TOP TABS -->
+      <ul id="tabs" class="nav nav-pills nav-justified">
+        <li class="active">
+          <a href="#tab1" data-toggle="tab" class="inactiveLink">
+            Mashauri Ticket MSH00001
+            <span id="ok-icon" class="glyphicon glyphicon-ok hidden"></span>
+          </a>
+        </li>
+      </ul>
+    
+    <div class="tab-content">
+    <!-- FIRST TAB -->
+    <div class="tab-pane active" id="tab1">
+      <div class="container-fluid">
+        <h3>Solomon Plaza</h3>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td class="td-padding">Building ID [SolP]</td>
+              <td class="td-padding"><span>Coordinates [lattitude 190, longitude]</span></td>
+              <td class="text-center td-padding"><span id="t1_pocet">MSP [Fireside]</span></td>
+            </tr>
+            <tr>
+              <td class="td-padding">Building ID [SolP]</td>
+              <td class="td-padding"><span>Coordinates [lattitude 190, longitude]</span></td>
+              <td class="text-center td-padding"><span id="t1_pocet">MSP [Fireside]</span></td>
+            </tr>
+            <tr>
+              <td class="td-padding"><span>Project Type [OTP]</span></td>
+              <td class="text-center td-padding"><span id="t2_pocet">Client Name [Victor]</span></td>
+            </tr>
+            <tr>
+              <td class="td-padding">Client ID [Vik123]</td>
+              <td class="td-padding"><span>Coments [Happy to be here]</span></td>
+              <td class="text-center td-padding"><span id="t3_pocet">SLA [24hours]</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <b>Happy to work: <span id="amount"></span>with you</b>
+        <hr>
+        <div class="text-right">
+          <button id="continue" class="btn btn-success" disabled> THANK YOU </button>
+        </div>
+    
+      </div> <!-- end container fluid -->
+    </div> <!-- end Tab1 content -->
+      </div> <!-- end container-fluid -->
+    </div> <!-- end tab-content -->
+    </div><!--  end container -->
+{% endblock%}

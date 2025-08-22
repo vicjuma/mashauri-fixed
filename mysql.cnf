@@ -1,0 +1,6 @@
+[client]
+database = mashauri
+user = root
+password = jumavic9118
+host = localhost
+port = 3306

@@ -1,0 +1,182 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div
+      class="col-11 col-sm-10 col-md-10 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2"
+    >
+      <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+        <h2 id="heading">Dispatch A Building</h2>
+        <p>Fill all form field to go to next step</p>
+        <form
+          id="msform"
+          action="{% url 'dispatch' %}"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          {% csrf_token %}
+          <!-- progressbar -->
+          <ul id="progressbar">
+            <li class="active" id="account"><strong>Account</strong></li>
+            <li id="personal"><strong>Personal</strong></li>
+            <li id="payment"><strong>Image</strong></li>
+            <li id="confirm"><strong>Finish</strong></li>
+          </ul>
+          <div class="progress">
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+          <br />
+          <!-- fieldsets -->
+          <fieldset>
+            <div class="form-card">
+              <div class="row">
+                <div class="col-7">
+                  <h2 class="fs-title">Building Identification:</h2>
+                </div>
+                <div class="col-5">
+                  <h2 class="steps">Step 1 - 4</h2>
+                </div>
+              </div>
+              <label class="fieldlabels" for="site_fdt_cluster_link_name"
+                >Building Name: *</label
+              >
+              <input
+                type="text"
+                name="site_fdt_cluster_link_name"
+                id="site_fdt_cluster_link_name"
+                required
+              />
+
+              <label class="fieldlabels" for="lepton_project_name" required
+                >BuildingID : *</label
+              >
+              <input type="text" name="lepton_project_name" id="lepton_project_name" />
+
+              <label class="fieldlabels" for="site_fdt_location"
+                >Site FDT Location: *</label
+              >
+              <input type="text" name="site_fdt_location" id="site_fdt_location" required />
+            </div>
+            <input
+              type="button"
+              name="next"
+              class="next action-button"
+              value="Next"
+            />
+          </fieldset>
+          <fieldset>
+            <div class="form-card">
+              <div class="row">
+                <div class="col-7">
+                  <h2 class="fs-title">Assignment Details:</h2>
+                </div>
+                <div class="col-5">
+                  <h2 class="steps">Step 2 - 4</h2>
+                </div>
+              </div>
+
+              <label class="fieldlabels" for="msp">MSP: *</label>
+              <select name="msp" id="msp">
+                {% for msp_value, msp_label in msp_choices %}
+                <option value="{{ msp_value }}">{{ msp_label }}</option>
+                {% endfor %}
+              </select>
+
+              <label class="fieldlabels" for="project_type"
+                >Project Type: *</label
+              >
+              <select name="project_type" id="project_type">
+                {% for prj_value, prj_label in escalation_choices %}
+                <option value="{{ prj_value }}">{{ prj_label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <input
+              type="button"
+              name="next"
+              class="next action-button"
+              value="Next"
+            />
+            <input
+              type="button"
+              name="previous"
+              class="previous action-button-previous"
+              value="Previous"
+            />
+          </fieldset>
+          <fieldset>
+            <div class="form-card">
+              <div class="row">
+                <div class="col-7">
+                  <h2 class="fs-title">Client Info and Image Upload:</h2>
+                </div>
+                <div class="col-5">
+                  <h2 class="steps">Step 3 - 4</h2>
+                </div>
+              </div>
+
+              <label class="fieldlabels" for="interception_location"
+                >Client Name: *</label
+              >
+              <input type="text" name="interception_location" id="interception_location" required />
+
+              <label class="fieldlabels" for="dispatch_image"
+                >Dispatch Image:</label
+              >
+              <input
+                type="file"
+                name="pic"
+                accept="image/*"
+                id="dispatch_image"
+                required
+              />
+
+              <label class="fieldlabels" for="comments">Comments: *</label>
+              <textarea name="comments" id="comments" required></textarea>
+            </div>
+            <input
+              type="button"
+              name="next"
+              class="next action-button submit"
+              value="Submit"
+            />
+            <input
+              type="button"
+              name="previous"
+              class="previous action-button-previous"
+              value="Previous"
+            />
+          </fieldset>
+          <fieldset>
+            <div class="form-card">
+              <div class="row">
+                <div class="col-7">
+                  <h2 class="fs-title">Finish:</h2>
+                </div>
+                <div class="col-5">
+                  <h2 class="steps">Step 4 - 4</h2>
+                </div>
+              </div>
+              <br /><br />
+              <h2 class="purple-text text-center" id="heading-message">
+                <strong>SUCCESS !</strong>
+              </h2>
+              <br />
+              <div class="row justify-content-center">
+                <div class="col-7 text-center">
+                  <h5 class="purple-text text-center" id="message">
+                    You Have Successfully Dispatched the building to the MSP.
+                    Redirecting...
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

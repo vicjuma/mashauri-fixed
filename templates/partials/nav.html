@@ -1,0 +1,42 @@
+<section class="container">
+    <header>
+      <nav class="navbar-menu">
+        
+        <!-- Menu normal -->
+        <ul class="menu">
+          <li><a href="{% url 'redirect_to_dashboard' %}">Dashboard Home</a>
+          </li>
+          <li><a href="{% url 'dispatch' %}">Dispatch</a>
+          </li>
+          <li><a href="{% url 'presentation' %}">Presentation</a>
+          </li>
+          <li><a href="{% url 'average_sla' %}">Average SLA</a>
+          </li>
+          </li>
+          <li><a href="{% url 'logout' %}">Logout</a>
+          </li>
+        </ul>
+        
+        <!-- Mini Menu -->
+        <nav class="navbar-mini-menu">
+          <div class="menu-select">
+            <span class="menu-actual">
+              Mashauri
+            </span>
+            <span class="btn-select">
+              
+            </span>
+          </div>
+          <ul class="mini-menu-options">
+            <li><a href="{% url 'redirect_to_dashboard' %}">Home</a></li>
+            <li tabIndex="0"><a href="{% url 'dispatch' %}">Dispatch</a></li>
+            <li tabIndex="0"><a  href="{% url 'presentation' %}">Presentation</a></li>
+            <li><a href="{% url 'average_sla' %}">Average SLA</a>
+            </li>
+            
+          </ul> <!-- Fin lista mini menu -->
+        </nav> <!-- Fin mini menu -->
+        
+      </nav> <!-- Fin menu general (nav) -->
+    </header>
+</section>

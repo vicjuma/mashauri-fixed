@@ -1,0 +1,27 @@
+sudo nano /etc/systemd/system/gunicorn-mashauri-fixed.socket
+sudo nano /etc/systemd/system/gunicorn-mashauri-fixed.service
+sudo systemctl start gunicorn-mashauri-fixed.socket 
+sudo systemctl enable gunicorn-mashauri-fixed.socket
+sudo systemctl status gunicorn-mashauri-fixed.socket
+file /run/gunicorn-mashauri-fixed.sock
+sudo systemctl daemon-reload
+sudo systemctl restart gunicorn
+curl --unix-socket /run/gunicorn-mashauri-fixed.sock localhost
+sudo nano /etc/nginx/sites-available/fixedmashauri
+sudo ln -s /etc/nginx/sites-available/fixedmashauri /etc/nginx/sites-enabled
+sudo nginx -t
+sudo systemctl restart nginx
+sudo chown -R www-data:www-data static
+sudo chmod -R 755 static
+sudo chmod 755 .
+sudo chmod 755 mashauri_core/ mashauri 
+sudo ufw delete allow 8000
+sudo certbot --nginx -d fixed.mashauri.co.ke -d www.fixed.mashauri.co.ke
+sudo systemctl restart nginx
+sudo nano /etc/systemd/system/celery-beat-fixed.service
+sudo nano /etc/systemd/system/celery-fixed.service
+sudo systemctl daemon-reload
+sudo systemctl start celery-fixed.service 
+sudo systemctl enable celery-fixed.service  
+sudo systemctl start celery-beat-fixed.service 
+sudo systemctl enable celery-beat-fixed.service 

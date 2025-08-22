@@ -1,0 +1,418 @@
+<!-- ========================= Main ==================== -->
+ {% load static %}
+ {% block extra_styles %}
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+<style>
+    .custom-select {
+        display: inline-block;
+        background: #46BD61;
+        border: 1px solid #fff;
+        color: #fff;
+        font-size: 12px;
+        position: relative;
+        padding: 1px;
+      }
+      
+      .custom-select:after {
+        border-left: 1px solid #fff;
+        content: '▼';
+        display: block;
+        width: 1.5em;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        line-height: 5em;
+      }
+      
+      .custom-select select {
+        border: 0;
+        color: #fff;
+        background: transparent;
+        padding: 1em 5em 1em 1em;
+        letter-spacing: 1px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.4em;
+        line-height: 1.2em;
+        cursor: pointer;
+        transition: .2s all;
+        border-radius: 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        appearance: none;
+      }
+      
+      .custom select select::-ms-expand {
+        display: none;
+      }
+      
+      .custom-select select:hover,
+      .custom-select select:focus {
+        outline: 0;
+        background: #000;
+        background: rgba(0,0,0,.5);
+      }
+      
+      option {
+        color: #fff;
+        display: block;
+        background: #000;
+        line-height: 3.9em;
+      }
+
+      .expired {
+            color: red;
+            font-weight: bold;
+        }
+
+        #searchForm input[type=text], select {
+          /* width:; */
+          padding: 12px 20px;
+          margin: 8px 0;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+          margin-left: 1rem;
+        }
+
+      #searchForm input[type=submit] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      input[type=submit]:hover {
+        background-color: #45a049;
+      }
+
+  #searchForm div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 1rem;
+  }
+</style>
+{% endblock %}
+<div class="main">
+    {% include '../partials/nav.html' %}
+    <!-- ======================= Cards ================== -->
+    <div class="cardBox">
+        <div class="card" id="normalLink">
+            <div>
+                <div class="cardName">All Escalations</div>
+                <div class="numbers"> {{ total_dispatches_all  }}</div>
+            </div>
+        </div>
+
+        <div class="card"  id="active-link">
+            <div>
+                <div class="cardName">Active Escalations</div>
+                <div class="numbers">{{ active_dispatches }}</div>
+            </div>
+        </div>
+        <div class="card" id="expired-link">
+            <div>
+                <div class="cardName">SLA Breach</div>
+                <div class="numbers">{{ breached }}</div>
+            </div>
+        </div>
+        <div class="card" id="closed-link">
+          <div>
+              <div class="cardName">Closed Escalations</div>
+              <div class="numbers">{{ closed_dispatches_count }}</div>
+          </div>
+      </div>
+    </div>
+
+    <form method="get" id="searchForm">
+      <input type="text" name="q" id="" placeholder="Enter Search Term...">
+      <input type="submit" value="Search">
+    </form>
+
+    <!-- ================ Order Details List ================= -->
+    <div class="details">
+        <div class="recentOrders" style="overflow: scroll;">
+            <div class="cardHeader">
+                <h2>Unclaimed Dispatches</h2>
+                <a href="{% url 'dispatch' %}" class="btn">Dispatch</a>
+            </div>
+
+            <table id="data-table" style="overflow: scroll;">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td colspan="2">Sort BY:</td>
+                        <td><div class="center-element">
+                            <span class="custom-select">
+                              <select id="project_type">
+                                <option selected>All</option>
+                                <option>Metro 2G/ SDC</option>
+                                <option>FTTx - Low Cost</option>
+                                <option>FTTx - ABR</option>
+                                <option>FTTB</option>
+                                <option>FTTx - Connections</option>
+                                <option>Fixes/ Relocations</option>
+                              </select>
+                            </span>
+                          </div></td>
+                        <td><div class="center-element">
+                            <span class="custom-select">
+                              <select id="msp">
+                                <option selected>All</option>
+                                <option>Egypro</option>
+                                <option>Camusat</option>
+                                <option>Adrian</option>
+                                <option>Kinde</option>
+                                <option>Fireside</option>
+                                <option>Soliton</option>
+                              </select>
+                            </span>
+                          </div></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Ticket</td>
+                        <td>Site/FDT/Cluster/Link Name</td>
+                        <td>Lepton Project Name</td>
+                        <td>Site/ FDT Location</td>
+                        <td>Interception Location</td>
+                        <td>Rollout Partner</td>
+                        <td>Project Type</td>
+                        <td>Maintenance Partner</td>
+                        <td>FDD Image</td>
+                        <td>HLD Image</td>
+                        <td>Created In</td>
+                        <td>SLA</td>
+                        <td>Time Remaining</td>
+                        <td>Status</td>
+                        <td>Details</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for dispatch in dispatches %} 
+                    {% if searched != True %}
+                    <tr data-status="{{ dispatch.status }}">
+                        <td><a href="{{ MEDIA_URL }}{{ dispatch.ticket.name }}" target="_blank" style="color: #1795ce; font-weight: bolder;">{{ dispatch.ticket.name }}</a></td>
+                        <td>{{ dispatch.site_fdt_cluster_link_name }}</td>
+                        <td>{{ dispatch.lepton_project_name }}</td>
+                        <td>{{ dispatch.site_fdt_location }}</td>
+                        <td>{{ dispatch.interception_location }}</td>
+                        <td class="rp">{{ dispatch.rp }}</td>
+                        <td class="escalation-type">{{ dispatch.project_type }}</td>
+                        {% if dispatch.msp %}
+                          <td class="msp">{{ dispatch.msp }} </td>
+                        {% else %}
+                          <td class="msp">{{ dispatch.reassign_to }} - {{ dispatch.ec }}</td>
+                        {% endif %}
+                        <td>
+                          {% if dispatch.fdd_image %}
+                            <a href="{{ dispatch.fdd_image.url }}" target="_blank" class="text-blue-600 underline">{{ dispatch.fdd_image.name }}</a>
+                          {% else %}
+                            <span class="text-gray-400">N/A</span>
+                          {% endif %}
+                        </td>
+                        <td>
+                          {% if dispatch.hld_image %}
+                            <a href="{{ dispatch.hld_image.url }}" target="_blank" class="text-blue-600 underline">{{ dispatch.hld_image.name }}</a>
+                          {% else %}
+                            <span class="text-gray-400">N/A</span>
+                          {% endif %}
+                        </td>
+                        <td>{{ dispatch.created_at }}</td>
+                        <td>{{ dispatch.sla_timer }}</td>
+                        {% if dispatch.status != "Closed" %}
+                            <td class="time-remaining">{{ dispatch.time_remaining_display }}</td>
+                        {% else %}
+                            <td>{{ dispatch.closure_message }}</td>
+                        {% endif %}
+                        <td>
+                          {% if dispatch.status == 'Closed' %}
+                              <span style="color: green;">  {{ dispatch.closed_time_display }} </span>
+                          {% else %}
+                              {{ dispatch.status }}
+                          {% endif %}
+                      </td>
+                        <td> <a href="{% url 'dispatch_detail' dispatch.pk %}" style="text-decoration: none; color: cyan"> Details </a> </td>
+                    </tr>
+                    {% elif searched == True %}
+                      <tr>
+                        <td><a href="{{ MEDIA_URL }}{{ dispatch.ticket.name }}" target="_blank" style="color: #1795ce; font-weight: bolder;">{{ dispatch.ticket.name }}</a></td>
+                        <td>{{ dispatch.site_fdt_cluster_link_name }}</td>
+                        <td>{{ dispatch.lepton_project_name }}</td>
+                        <td>{{ dispatch.site_fdt_location }}</td>
+                        <td>{{ dispatch.interception_location }}</td>
+                        <td class="rp">{{ dispatch.rp }}</td>
+                        <td class="escalation-type">{{ dispatch.project_type }}</td>
+                        {% if dispatch.msp %}
+                          <td class="msp">{{ dispatch.msp }} </td>
+                        {% else %}
+                          <td class="msp">{{ dispatch.reassign_to }} - {{ dispatch.ec }}</td>
+                        {% endif %}
+                        <td>
+                          {% if dispatch.fdd_image %}
+                            <a href="{{ dispatch.fdd_image.url }}" target="_blank" class="text-blue-600 underline">{{ dispatch.fdd_image.name }}</a>
+                          {% else %}
+                            <span class="text-gray-400">N/A</span>
+                          {% endif %}
+                        </td>
+                        <td>
+                          {% if dispatch.hld_image %}
+                            <a href="{{ dispatch.hld_image.url }}" target="_blank" class="text-blue-600 underline">{{ dispatch.hld_image.name }}</a>
+                          {% else %}
+                            <span class="text-gray-400">N/A</span>
+                          {% endif %}
+                        </td>
+                        <td>{{ dispatch.created_at }}</td>
+                        <td>{{ dispatch.sla_timer }}</td>
+                        {% if dispatch.status != "Closed" %}
+                            <td class="time-remaining">{{ dispatch.time_remaining_display }}</td>
+                        {% else %}
+                            <td>{{ dispatch.closure_message }}</td>
+                        {% endif %}
+                        <td>
+                          {% if dispatch.status == 'Closed' %}
+                              <span style="color: green;">  {{ dispatch.closed_time_display }} </span>
+                          {% else %}
+                              {{ dispatch.status }}
+                          {% endif %}
+                      </td>
+                        <td> <a href="{% url 'dispatch_detail' dispatch.pk %}" style="text-decoration: none; color: cyan"> Details </a> </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+<a href="{% url 'presentation' %}">Presentation</a>
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+  document.querySelectorAll('#project_type, #msp').forEach(select => {
+    select.addEventListener('change', filterTable);
+});
+
+function filterTable() {
+    let escalationType = document.getElementById('project_type').value.trim();
+    let msp = document.getElementById('msp').value.trim();
+
+    let rows = document.querySelectorAll('#data-table tbody tr');
+
+    rows.forEach(row => {
+        let rowEscalationType = row.querySelector('.escalation-type')?.textContent.trim() || '';
+        let rowMsp = row.querySelector('.msp')?.textContent.trim() || '';
+
+        let escalationTypeMatch = (escalationType === 'All' || rowEscalationType.toLowerCase() === escalationType.toLowerCase());
+        let mspMatch = (msp === 'All' || rowMsp.toLowerCase() === msp.toLowerCase());
+
+        if (escalationTypeMatch && mspMatch && row.getAttribute('data-status') !== 'Closed') {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+
+  const tds = document.querySelectorAll('td');
+
+  tds.forEach(td => {
+      if (td.textContent.trim().startsWith('Expired')) {
+          td.classList.add('expired');
+      }
+  });
+
+
+
+
+
+  document.getElementById('expired-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    let rows = document.querySelectorAll('#data-table tbody tr');
+    rows.forEach(row => {
+      let timeCell = row.querySelector('.time-remaining');
+      let isExpired = timeCell && timeCell.textContent.trim().startsWith('Expired');
+      
+      if (isExpired) {
+        let matchingRows = document.querySelectorAll(`#data-table tbody tr[data-status="Progress"]`);
+        matchingRows.forEach(row => {
+          row.style.display = '';
+        });
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+
+document.getElementById('active-link').addEventListener('click', function(e) {
+  e.preventDefault();
+  let rows = document.querySelectorAll('#data-table tbody tr');
+  rows.forEach(row => {
+      row.style.display = '';
+  });
+  let closedDispatches = JSON.parse('{{ closed_dispatches_json|escapejs }}');  // Safely render and parse
+  console.log(closedDispatches)
+  closedDispatches.forEach(dispatch => {
+    let matchingRows = document.querySelectorAll(`#data-table tbody tr[data-status="Progress"]`);
+    matchingRows.forEach(row => {
+        row.style.display = '';  // Show the row
+    });
+  });
+});
+
+// Function to hide/show rows based on data-status="Closed"
+function handleRowsVisibility() {
+  let rows = document.querySelectorAll('#data-table tbody tr');
+  rows.forEach(row => {
+    console.log(row);
+    if (!row.hasAttribute('data-status') || row.getAttribute('data-status') !== 'Closed') {
+      row.style.display = ''; // Show non-closed rows
+    } else {
+      row.style.display = 'none'; // Hide closed rows
+    }
+  });
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', function() {
+  handleRowsVisibility();  // Call the function when the page loads
+});
+
+// Run on click of the 'normalLink'
+document.getElementById('normalLink').addEventListener('click', function(e) {
+  e.preventDefault();
+  handleRowsVisibility();  // Call the same function on click
+});
+
+
+document.getElementById('closed-link').addEventListener('click', function(e) {
+  e.preventDefault();
+  let rows = document.querySelectorAll('#data-table tbody tr');
+  rows.forEach(row => {
+      row.style.display = 'none';
+  });
+
+  let closedDispatches = JSON.parse('{{ closed_dispatches_json|escapejs }}');  // Safely render and parse
+  console.log(closedDispatches)
+  closedDispatches.forEach(dispatch => {
+    let matchingRows = document.querySelectorAll(`#data-table tbody tr[data-status="Closed"]`);
+    matchingRows.forEach(row => {
+        row.style.display = '';  // Show the row
+    });
+  });
+});
+
+
+</script>
+
+{% endblock %}

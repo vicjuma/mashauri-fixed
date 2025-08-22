@@ -1,0 +1,17 @@
+pip install celery
+pip install django-celery-results
+pip install django-celery-beat
+sudo systemctl start celery
+sudo systemctl enable celery-beat
+sudo systemctl enable celery
+sudo mkdir -p /var/run/celery
+sudo chown steve:www-data /var/run/celery
+sudo chmod 775 /var/run/celery
+sudo systemctl restart celery-beat.service 
+sudo nano /etc/systemd/system/celery-beat.service
+sudo systemctl start celery-beat.service 
+journalctl -xeu celery-beat.service
+sudo systemctl status celery-beat.service 
+sudo nano /etc/systemd/system/celery.service
+sudo systemctl status celery.service
+sudo systemctl restart celery

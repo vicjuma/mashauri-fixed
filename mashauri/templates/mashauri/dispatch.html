@@ -1,0 +1,178 @@
+{% extends '../partials/base.html' %}
+{% load static %}
+{% block extra_styles %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
+<link rel="stylesheet" href="{% static 'assets/css/menu.css' %}">
+<style>
+    #success_message {
+        display: none;
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div class="container">
+    {% include '../partials/nav.html' %}
+    <form class="well form-horizontal" action=" " method="post" id="contact_form"
+        style="border-radius:10px; margin-top: 5rem; box-shadow: 0 15px 25px rgba(0,0,0,.6);">
+        <fieldset>
+            <!-- Form Name -->
+            <legend style="margin: 0 auto; text-align: center; margin-bottom: 2rem;">Dispatch Your Building!</legend>
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label">Site/FDT/Cluster/Link Name</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                        <input name="site_fdt_cluster_link_name" placeholder="Site/FDT Cluster Link Name" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <!-- Text input-->
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Lepton Project Name</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+                        <input name="lepton_project_name" placeholder="Lepton Project Name" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label">Site/ FDT Location</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                        <input name="site_fdt_location" placeholder="Site/ FDT Location" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Text input-->
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Interception Location</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                        <input name="interception_location" placeholder="Interception Location" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RP -->
+            <div class="form-group">
+                <label class="col-md-4 control-label">Rollout Partner</label>
+                <div class="col-md-4 selectContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                        <select name="rp" class="form-control selectpicker">
+                            <option value=" ">Please select a Rollout Partner</option>
+                            {% for rp_value, rp_label in rp_choices %}
+                            <option value="{{ rp_value }}">{{ rp_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Project Type</label>
+                <div class="col-md-4 selectContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                        <select name="project_type" class="form-control selectpicker">
+                            <option value=" ">Please select the Project Type</option>
+                            {% for esc_value, esc_label in project_choices %}
+                            <option value="{{ esc_value }}">{{ esc_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Maintenance Partner</label>
+                <div class="col-md-4 selectContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                        <select name="msp" class="form-control selectpicker">
+                            <option value=" ">Please select an MSP</option>
+                            {% for msp_value, msp_label in msp_choices %}
+                            <option value="{{ msp_value }}">{{ msp_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text input-->
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">FDD Image</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-cloud-upload"></i></span>
+                        <input name="fdd_image" placeholder="FDD Image" class="form-control" type="file"
+                            accept="image/*,application/pdf">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">HLD Image</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-cloud-upload"></i></span>
+                        <input name="hld_image" placeholder="HLD Image" class="form-control" type="file"
+                            accept="image/*,application/pdf">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label">Comments</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <textarea class="form-control" name="comments" placeholder="Comments"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success message -->
+            <div class="alert alert-success" role="alert" id="success_message">Success <i
+                    class="glyphicon glyphicon-thumbs-up"></i> Thanks for the escalation, attending to it shortly.</div>
+
+            <!-- Button -->
+            <div class="form-group">
+                <label class="col-md-4 control-label"></label>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-info">Send <span
+                            class="glyphicon glyphicon-send"></span></button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+</div><!-- /.container -->
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js"
+    type="text/javascript"></script>
+<script>
+    window.csrfToken = '{{ csrf_token }}';
+</script>
+<script src="{% static 'assets/js/dispatch.js' %}"></script>
+<script src="{% static 'assets/js/menu.js' %}"></script>
+{% endblock %}
+{% endblock %}
