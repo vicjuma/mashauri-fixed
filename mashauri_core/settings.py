@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mashauri.apps.MashauriConfig',
-    # 'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl',
     'django_celery_results',
     'django_celery_beat',
 ]
