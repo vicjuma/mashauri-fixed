@@ -62,8 +62,8 @@
       }
 
       .expired {
-            color: red;
-            font-weight: bold;
+            color: red !important;
+            font-weight: bold !important;
         }
 
         #searchForm input[type=text], select {
@@ -136,10 +136,11 @@
     <!-- ================ Order Details List ================= -->
     <div class="details">
         <div class="recentOrders" style="overflow: scroll;">
-            <div class="cardHeader">
-                <h2>Unclaimed Dispatches</h2>
-                <a href="{% url 'dispatch' %}" class="btn">Dispatch</a>
-            </div>
+            <div class="cardHeader" style="display: flex; align-items: center; gap: 10px; justify-content: flex-start;">
+              <a href="{% url 'dispatch' %}" class="btn">Dispatch</a>
+              <a href="{% url 'export_dispatches_excel' %}" class="btn" style="background-color: green;">Export as Excel</a>
+              <h2 style="margin-left: auto;">Unclaimed Dispatches</h2>
+          </div>
 
             <table id="data-table" style="overflow: scroll;">
                 <thead>
@@ -324,13 +325,14 @@ function filterTable() {
 }
 
 
-  const tds = document.querySelectorAll('td');
+  const rows = document.querySelectorAll('#data-table tbody tr');
 
-  tds.forEach(td => {
-      if (td.textContent.trim().startsWith('Expired')) {
-          td.classList.add('expired');
-      }
-  });
+rows.forEach(row => {
+    let timeCell = row.querySelector('.time-remaining');
+    if (timeCell && timeCell.textContent.trim().startsWith('Expired')) {
+        row.classList.add('expired');  // apply class to entire row
+    }
+});
 
 
 

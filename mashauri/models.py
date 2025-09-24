@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, \
     UserManager, PermissionsMixin
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 
 class CustomUserManager(UserManager):
@@ -201,13 +201,29 @@ class Dispatch(models.Model):
     closed_at = models.DateTimeField(null=True, blank=True)
     fdd_image = models.ImageField(upload_to='fdd_images/', null=True, blank=True)
     hld_image = models.ImageField(upload_to='hld_images/', null=True, blank=True)
+    need_by_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Date by which the dispatch is required"
+    )
+    implementation_contact_person = models.CharField(
+        max_length=100,
+        default="Unassigned",
+        help_text="Person responsible for implementation"
+    )
 
     def __str__(self):
         return f'{self.id} - {self.site_fdt_cluster_link_name}'
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.sla_timer = timezone.now() + timedelta(hours=48)
+            if self.need_by_date:
+                self.sla_timer = timezone.make_aware(
+                    datetime.combine(self.need_by_date, datetime.min.time())
+                ) + timedelta(hours=48)
+            else:
+                self.sla_timer = timezone.now() + timedelta(hours=48)
+
         super(Dispatch, self).save(*args, **kwargs)
 
     class Meta:

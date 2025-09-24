@@ -1,6 +1,7 @@
 import os
 # from django.core.serializers import serialize
 import plotly.graph_objs as go
+import openpyxl
 from django.urls import reverse
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
@@ -8,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import User, Dispatch, Comment
 from datetime import timedelta
-from django.http import JsonResponse, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from collections import defaultdict
@@ -396,3 +397,37 @@ def average_sla(request):
     }
 
     return render(request, 'mashauri/average_sla.html', context)
+
+def export_dispatches_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Dispatches"
+
+    # headers
+    headers = ["Ticket", "Site/FDT/Cluster/Link Name", "Lepton Project Name", 
+               "Site/FDT Location", "Interception Location", "RP", 
+               "Project Type", "MSP", "Created At", "SLA Timer", "Status"]
+    ws.append(headers)
+
+    # data
+    for dispatch in Dispatch.objects.all():
+        ws.append([
+            dispatch.ticket.name if dispatch.ticket else "N/A",
+            dispatch.site_fdt_cluster_link_name,
+            dispatch.lepton_project_name,
+            dispatch.site_fdt_location,
+            dispatch.interception_location,
+            dispatch.rp,
+            dispatch.project_type,
+            dispatch.msp,
+            dispatch.created_at.strftime("%Y-%m-%d %H:%M"),
+            dispatch.sla_timer.strftime("%Y-%m-%d %H:%M") if dispatch.sla_timer else "N/A",
+            dispatch.status,
+        ])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = 'attachment; filename="dispatches.xlsx"'
+    wb.save(response)
+    return response

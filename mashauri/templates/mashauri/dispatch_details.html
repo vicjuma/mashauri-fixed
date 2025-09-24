@@ -257,7 +257,6 @@
     </div>
   </div>
 
-  {% if is_msp or is_ec %}
   <div class="details-card">
     <h3 class="mb-4" style="font-weight: 700; color: #2c3e50;">Add Progress Comment</h3>
 
@@ -275,7 +274,7 @@
       <button type="submit" class="btn-action btn-comment mt-3">Submit Comment</button>
     </form>
   </div>
-
+ {% if is_msp or is_ec %}
   <div class="details-card">
     <h3 class="mb-4" style="font-weight: 700; color: #2c3e50;">Comment & Close Dispatch</h3>
 

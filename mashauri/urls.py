@@ -23,4 +23,5 @@ urlpatterns = [
         name='redirect_to_dashboard'),
     path('pdf/', views.redirect_to_dashboard, name='pdf_gen'),
     path('average/sla/', views.average_sla, name='average_sla'),
+    path("export/dispatches/excel/", views.export_dispatches_excel, name="export_dispatches_excel"),
 ]

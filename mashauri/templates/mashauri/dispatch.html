@@ -20,7 +20,7 @@
         style="border-radius:10px; margin-top: 5rem; box-shadow: 0 15px 25px rgba(0,0,0,.6);">
         <fieldset>
             <!-- Form Name -->
-            <legend style="margin: 0 auto; text-align: center; margin-bottom: 2rem;">Dispatch Your Building!</legend>
+            <legend style="margin: 0 auto; text-align: center; margin-bottom: 2rem;">Dispatch Project</legend>
             <!-- Text input-->
             <div class="form-group">
                 <label class="col-md-4 control-label">Site/FDT/Cluster/Link Name</label>
@@ -133,6 +133,28 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-cloud-upload"></i></span>
                         <input name="hld_image" placeholder="HLD Image" class="form-control" type="file"
                             accept="image/*,application/pdf">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Need By Date -->
+            <div class="form-group">
+                <label class="col-md-4 control-label">Need By Date</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        <input name="need_by_date" placeholder="YYYY-MM-DD" class="form-control" type="date" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implementation Contact Person -->
+            <div class="form-group">
+                <label class="col-md-4 control-label">Implementation Contact Person</label>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input name="implementation_contact_person" placeholder="Enter contact person name" class="form-control" type="text" required>
                     </div>
                 </div>
             </div>

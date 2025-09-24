@@ -29,6 +29,7 @@ from django.contrib import messages
 from django.shortcuts import render
 from reportlab.lib.pagesizes import letter, landscape
 
+from datetime import datetime
 
 def rename_uploaded_file(file_obj, building_id, folder, prefix):
     try:
@@ -156,7 +157,11 @@ def generate_pdf(
         comments,
         site_fdt_location,
         interception_location,
-        tid):
+        tid,
+        sla_timer=None,
+        created_at=None,
+        closed_at=None,
+        last_comment=None):
 
     buf = io.BytesIO()
     doc = SimpleDocTemplate(
@@ -195,8 +200,8 @@ def generate_pdf(
         spaceAfter=12,
     )
 
-    # Use local logo (like your original)
-    logo_path = os.path.join(settings.MEDIA_ROOT, 'logos', 'logo.png')  # Customize as needed
+    # Use local logo
+    logo_path = os.path.join(settings.MEDIA_ROOT, 'logos', 'logo.png')
     logo = Image(logo_path, width=561/4, height=445/4)
 
     elements = [
@@ -207,7 +212,17 @@ def generate_pdf(
         Spacer(1, 12),
     ]
 
-    # Data table (simplified args but styled like your favorite version)
+    # Pending duration calculation
+    if created_at:
+        if closed_at:
+            pending_duration = closed_at - created_at
+        else:
+            pending_duration = timezone.now() - created_at
+        pending_duration_str = str(pending_duration).split('.')[0]  # strip microseconds
+    else:
+        pending_duration_str = "N/A"
+
+    # Data table with new fields
     data = [
         ['PROPERTY', 'VALUE'],
         ['Site/FDT Cluster Link Name', site_fdt_cluster_link_name],
@@ -216,6 +231,9 @@ def generate_pdf(
         ['MSP', msp],
         ['Project Type', project_type],
         ['Interception Location', interception_location],
+        ['SLA Timer', sla_timer.strftime("%Y-%m-%d %H:%M") if sla_timer else "N/A"],
+        ['Pending Duration', pending_duration_str],
+        ['Last Comment', last_comment or "No comments yet"],
     ]
 
     table = Table(data, colWidths=[doc.width / 2.0] * 2)
@@ -372,7 +390,6 @@ def build_context(user, category_field, category_value, request):
     
     status_counts_user = calculate_status_counts(all_dispatches)
     status_counts_all = calculate_status_counts(all_dispatches)
-    print(all_dispatches[0].ticket.name)
     data = {
         'user': user,
         'status_counts': status_counts_user,
@@ -401,12 +418,19 @@ def extract_dispatch_data(request):
         'interception_location': request.POST.get('interception_location'),
         'comments': request.POST.get('comments'),
         'fdd_image': request.FILES.get('fdd_image'),
-        'hld_image': request.FILES.get('hld_image')
+        'hld_image': request.FILES.get('hld_image'),
+        'need_by_date': request.POST.get('need_by_date'),
+        'implementation_contact_person': request.POST.get('implementation_contact_person'),
     }
 
 
 def save_dispatch(data, user):
     """Save the Dispatch instance."""
+    need_by_date = None
+    
+    if data['need_by_date']:
+        need_by_date = datetime.strptime(data['need_by_date'], "%Y-%m-%d").date()
+        
     dispatch = Dispatch(
         site_fdt_cluster_link_name=data['site_fdt_cluster_link_name'],
         lepton_project_name=data['lepton_project_name'],
@@ -416,6 +440,8 @@ def save_dispatch(data, user):
         comments=data['comments'],
         site_fdt_location=data['site_fdt_location'],
         interception_location=data['interception_location'],
+        need_by_date=need_by_date,
+        implementation_contact_person=data['implementation_contact_person'],
         user=user,
     )
     hld_image = rename_uploaded_file(data['hld_image'], data['site_fdt_cluster_link_name'], 'hld_images', 'HLD-Image')
@@ -466,7 +492,7 @@ def determine_email_recipients(msp, rp):
             "fnmc@egypro.com", "Fnmc_provisioning@egypro.com", "vmulongo@safaricom.co.ke", "mmutemi@safaricom.co.ke", "nirungu@safaricom.co.ke", "ckimani2@safaricom.co.ke", "condiere@safaricom.co.ke", "FixedNetworkSolutionsPlanning@Safaricom.co.ke", "HomeImplementation@Safaricom.co.ke", "HomeFixedWirelessAccess@Safaricom.co.ke", "FixedCapacityOptimization@Safaricom.co.ke", "sogola@safaricom.co.ke"],
         'Camusat': [
             "noc.kenya@camusat.com",
-            "wmureithi@camusat.com", "kogutu@camusat.com", "jkomba@camusat.com", "vmulongo@safaricom.co.ke", "mmutemi@safaricom.co.ke", "nirungu@safaricom.co.ke", "ckimani2@safaricom.co.ke", "condiere@safaricom.co.ke", "FixedNetworkSolutionsPlanning@Safaricom.co.ke", "HomeImplementation@Safaricom.co.ke", "HomeFixedWirelessAccess@Safaricom.co.ke", "FixedCapacityOptimization@Safaricom.co.ke", "sogola@safaricom.co.ke"],
+            "cmajanga@camusat.com", "kogutu@camusat.com", "jkomba@camusat.com", "vmulongo@safaricom.co.ke", "mmutemi@safaricom.co.ke", "nirungu@safaricom.co.ke", "ckimani2@safaricom.co.ke", "condiere@safaricom.co.ke", "FixedNetworkSolutionsPlanning@Safaricom.co.ke", "HomeImplementation@Safaricom.co.ke", "HomeFixedWirelessAccess@Safaricom.co.ke", "FixedCapacityOptimization@Safaricom.co.ke", "sogola@safaricom.co.ke"],
         'Adrian': [
             "nmc-fiber@adriankenya.com", "coreprovisioning@adriankenya.com", "cedrick.kamitu@adriankenya.com", "vmulongo@safaricom.co.ke", "mmutemi@safaricom.co.ke", "nirungu@safaricom.co.ke", "ckimani2@safaricom.co.ke", "condiere@safaricom.co.ke", "FixedNetworkSolutionsPlanning@Safaricom.co.ke", "HomeImplementation@Safaricom.co.ke", "HomeFixedWirelessAccess@Safaricom.co.ke", "FixedCapacityOptimization@Safaricom.co.ke", "sogola@safaricom.co.ke"],
         'Kinde': [
@@ -490,7 +516,7 @@ def determine_email_recipients(msp, rp):
         'Techminds': ["nkarambu@techminds.co.ke", "alexkarani@techminds.co.ke", "mmusyoka@techminds.co.ke"],
         'Egypro': ["Josephine_Kathure@egypro.com", "yashi_ndeje@egypro.com", "diana_okware@egypro.com"],
         'Optimax': ["tracy.kigen@otimaxgroup.co.ke"],
-        'Pavicon': ["philip.omoiti@pavicon.co.ke", "kangogo@pavicon.co.ke", "josephine.lundi@pavicon.co.ke"],
+        'Pavicon': ["philip.omoiti@pavicon.co.ke", "kangogo@pavicon.co.ke", "josephine.lundi@pavicon.co.ke", "valary.ayuma@pavicon.co.ke"],
         'Adrian': ["Winnie.kamweti@adriankenya.com", "edna.kimani@adriankenya.com", "joseph.kimani@adriankenya.com"],
         'Tetranet': ["francis@tetranet.co.ke"],
         'Acl': ["jane@aclkenya.co.ke", "lmburu@aclkenya.co.ke", "joyce@aclkenya.co.ke", "amos@aclkenya.co.ke"],
@@ -648,16 +674,13 @@ def handle_dispatch_reassignment(
     return render(request, 'mashauri/success_reassignment.html', {})
 
 
-'''SENDING SCHEDULES EMAILS'''
 def generate_pdf_mailed(dispatches, filename, title):
     buffer = BytesIO()
 
-    # Create the PDF document in landscape mode
     doc = SimpleDocTemplate(
         buffer, pagesize=landscape(letter), rightMargin=36,
         leftMargin=36, topMargin=36, bottomMargin=36)
 
-    # Create a custom stylesheet for text formatting
     styles = getSampleStyleSheet()
     header_style = styles['Heading1']
     header_style.fontName = "Times-Roman"
@@ -665,71 +688,83 @@ def generate_pdf_mailed(dispatches, filename, title):
     header_style.alignment = 1
     header_style.spaceAfter = 12
 
-    # Normal text style
     normal_style = styles['Normal']
     normal_style.fontName = "Times-Roman"
     normal_style.fontSize = 8
 
-    # Prepare table data with headers
+    # Add new columns for SLA, Pending Duration, Last Comment
     data = [
-        ["Client Name", "CI", "Building Name", "Project Type", "MSP"]
+        ["Client Name", "CI", "Building Name", "Project Type", "MSP",
+         "SLA Timer", "Pending Duration", "Last Comment"]
     ]
 
-    # Alternate colors for stripes
     stripe_colors = [colors.lightgrey, colors.whitesmoke]
 
-    # Add rows for the dispatches
     for dispatch in dispatches:
+        # Pending Duration calculation
+        if dispatch.created_at:
+            if dispatch.closed_at:
+                pending_duration = dispatch.closed_at - dispatch.created_at
+            else:
+                pending_duration = timezone.now() - dispatch.created_at
+            pending_duration_str = str(pending_duration).split('.')[0]
+        else:
+            pending_duration_str = "N/A"
+
+        # Last Comment
+        last_comment_obj = dispatch.comment_set.order_by('-created_at').first()
+        last_comment = last_comment_obj.content if last_comment_obj else "No comments"
+
         row = [
             Paragraph(dispatch.interception_location or "N/A", normal_style),
             Paragraph(dispatch.site_fdt_cluster_link_name or "N/A", normal_style),
+            Paragraph(dispatch.site_fdt_location or "N/A", normal_style),
             Paragraph(dispatch.project_type or "N/A", normal_style),
             Paragraph(dispatch.msp or "N/A", normal_style),
+            Paragraph(dispatch.sla_timer.strftime("%Y-%m-%d %H:%M") if dispatch.sla_timer else "N/A", normal_style),
+            Paragraph(pending_duration_str, normal_style),
+            Paragraph(last_comment, normal_style),
         ]
         data.append(row)
 
-    # Define column widths
     column_widths = [
-        1.8 * inch,
-        1.2 * inch,
-        1.8 * inch, 1.8 * inch, 1.2 * inch]
+        1.5 * inch,  # Client Name
+        1.2 * inch,  # CI
+        1.8 * inch,  # Building Name
+        1.5 * inch,  # Project Type
+        1.2 * inch,  # MSP
+        1.5 * inch,  # SLA Timer
+        1.8 * inch,  # Pending Duration
+        2.5 * inch,  # Last Comment
+    ]
 
-    # Create the table
     table = Table(data, colWidths=column_widths)
 
-    # Apply styling to the table
     style = TableStyle([
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),  # White text for header
-        ('BACKGROUND', (0, 0), (-1, 0), colors.darkblue),  # Dark blue header
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),  # Center-align all cells
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),  # Grid lines
-        ('FONTNAME', (0, 0), (-1, -1), 'Times-Roman'),  # Serif font
-        ('FONTSIZE', (0, 0), (-1, 0), 10),  # Larger font for header
-        ('FONTSIZE', (0, 1), (-1, -1), 8),  # Smaller font for body
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),  # Padding for header
-        ('TOPPADDING', (0, 1), (-1, -1), 8),  # Padding for body rows
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.darkblue),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('FONTNAME', (0, 0), (-1, -1), 'Times-Roman'),
+        ('FONTSIZE', (0, 0), (-1, 0), 10),
+        ('FONTSIZE', (0, 1), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('TOPPADDING', (0, 1), (-1, -1), 8),
         ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
-        ('WORDWRAP', (0, 0), (-1, -1), True),  # Enable word wrapping
+        ('WORDWRAP', (0, 0), (-1, -1), True),
     ])
 
-    # Apply striping colors for each row
     for i in range(1, len(data)):
         style.add('BACKGROUND', (0, i), (-1, i), stripe_colors[i % 2])
 
-    # Apply the style to the table
     table.setStyle(style)
 
-    # Add a title at the top of the page
-    elements = [Paragraph(title, header_style)]  # Title at the top
-
-    # Build the PDF document with the title and table
+    elements = [Paragraph(title, header_style)]
     doc.build(elements + [table])
 
-    # Move to the beginning of the buffer to read the generated content
     buffer.seek(0)
-
-    # Return as a ContentFile, including the dynamic filename
     return ContentFile(buffer.read(), name=filename)
+
 
 
 def save_contentfile_to_disk(contentfile, filename):
