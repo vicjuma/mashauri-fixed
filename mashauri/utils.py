@@ -372,7 +372,6 @@ def build_context(user, category_field, category_value, request):
     
     status_counts_user = calculate_status_counts(all_dispatches)
     status_counts_all = calculate_status_counts(all_dispatches)
-    print(all_dispatches[0].ticket.name)
     data = {
         'user': user,
         'status_counts': status_counts_user,

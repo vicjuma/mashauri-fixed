@@ -1,0 +1,41 @@
+IP - 102.221.35.150
+Username - steve (Has root priviledges)
+Password - k?qK=}$u2XR3MK6M
+SSH Port - 7654
+
+Cloud Portal credentials
+
+URL - https://nova.nbo.angani.co/
+Username - stevogola@outlook.com 
+Password - ZU&u>>\d|NTF?sT2
+Domain - Customer
+
+scp -r -P 7654 mashauri  steve@102.221.35.150:~/mashauri/
+ssh -p 7654 steve@102.221.35.150
+
+nano fiberIS/celery.py 
+sudo systemctl restart celery.service
+sudo systemctl restart celery.service
+sudo systemctl restart celery-beat.service
+
+pip install django-celery-beat
+sudo nano /etc/systemd/system/celery.service
+sudo nano /etc/systemd/system/celery-beat.service
+
+
+sudo systemctl start celery
+sudo systemctl start celery-beat
+sudo systemctl enable celery-beat
+sudo systemctl enable celery
+sudo systemctl start celery-beat
+
+sudo mkdir -p /var/run/celery
+sudo chown steve:www-data /var/run/celery
+sudo nano /etc/systemd/system/gunicorn.service
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # 1GB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # 1GB
+
+
+sudo journalctl -u gunicorn -n 30
+
