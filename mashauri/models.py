@@ -45,6 +45,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         Kinde = "Kinde", "Kinde"
         Fireside = "Fireside", "Fireside"
         Soliton = "Soliton", "Soliton"
+        Tetranet = "Tetranet", "Tetranet"
+        Optimax = "Optimax", "Optimax"
+        Sovereign_Communications = "Sovereign Communications", "Sovereign Communications"
+        Corevantage = "Corevantage", "Corevantage"
 
     class RP(models.TextChoices):
         No_rp = "None", "None"
@@ -125,6 +129,10 @@ class Dispatch(models.Model):
         ('Kinde', 'Kinde'),
         ('Fireside', 'Fireside'),
         ('Soliton', 'Soliton'),
+        ('Tetranet', 'Tetranet'),
+        ('Optimax', 'Optimax'),
+        ('Sovereign Communications', 'Sovereign Communications'),
+        ('Corevantage', 'Corevantage'),
     ]
 
     STATUS_CHOICES = [

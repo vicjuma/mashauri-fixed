@@ -477,7 +477,19 @@ def determine_email_recipients(msp, rp):
         'Soliton': [
             "noc@soliton.co.ke",
             "vincent.omondi@soliton.co.ke",
-            "vmulongo@safaricom.co.ke", "mmutemi@safaricom.co.ke", "nirungu@safaricom.co.ke", "ckimani2@safaricom.co.ke", "condiere@safaricom.co.ke", "FixedNetworkSolutionsPlanning@Safaricom.co.ke", "HomeImplementation@Safaricom.co.ke", "HomeFixedWirelessAccess@Safaricom.co.ke", "FixedCapacityOptimization@Safaricom.co.ke", "sogola@safaricom.co.ke"]
+            "vmulongo@safaricom.co.ke", "mmutemi@safaricom.co.ke", "nirungu@safaricom.co.ke", "ckimani2@safaricom.co.ke", "condiere@safaricom.co.ke", "FixedNetworkSolutionsPlanning@Safaricom.co.ke", "HomeImplementation@Safaricom.co.ke", "HomeFixedWirelessAccess@Safaricom.co.ke", "FixedCapacityOptimization@Safaricom.co.ke", "sogola@safaricom.co.ke"],
+        'Tetranet': [
+             "tetranetfiberteam@tetranet.co.ke", "fibernoc@tetranet.co.ke", "cedric@tetranet.co.ke", "penina.gitonga@tetranet.co.ke",
+             "vmulongo@safaricom.co.ke", "mmutemi@safaricom.co.ke", "nirungu@safaricom.co.ke", "ckimani2@safaricom.co.ke", "condiere@safaricom.co.ke",
+             "FixedNetworkSolutionsPlanning@Safaricom.co.ke", "HomeImplementation@Safaricom.co.ke", "HomeFixedWirelessAccess@Safaricom.co.ke",
+             "FixedCapacityOptimization@Safaricom.co.ke", "sogola@safaricom.co.ke"],
+        'Optimax': [
+            "noc@optimaxgroup.co.ke", "vashty.maiyo@optimaxgroup.co.ke", "francis.odhiambo@optimaxgroup.co.ke",
+            "vmulongo@safaricom.co.ke", "mmutemi@safaricom.co.ke", "nirungu@safaricom.co.ke", "ckimani2@safaricom.co.ke", "condiere@safaricom.co.ke",
+            "FixedNetworkSolutionsPlanning@Safaricom.co.ke", "HomeImplementation@Safaricom.co.ke", "HomeFixedWirelessAccess@Safaricom.co.ke",
+            "FixedCapacityOptimization@Safaricom.co.ke", "sogola@safaricom.co.ke"],
+        'Sovereign Communications': ["noc@sovereigncommunication.co.ke", "w.kandie@sovereignvommunication.co.ke", "n.nganga@sovereigncommunication.co.ke"],
+        'Corevantage': ["fiber.noc@corevantage.co.ke", "clare.gitonga@corevantage.co.ke", "george.orina@corevantage.co.ke"],
     }
 
     rp_emails = {
